@@ -1,0 +1,88 @@
+import type { Project } from "@/types";
+
+export const projects: Project[] = [
+  {
+    slug: "telegram-commerce-bot",
+    title: "Telegram Commerce Bot",
+    description: "Full-stack e-commerce bot with payment integration and admin panel.",
+    category: "Telegram",
+    year: 2025,
+    tech: ["Node.js", "MongoDB", "Telegram Bot API", "Redis"],
+    image: "https://images.unsplash.com/photo-1611162617474-5b21e939e986?w=800&q=80",
+    github: "https://github.com/rasuldev",
+    demo: "https://t.me/rasuldev",
+    problem: "Mijozlar Telegram orqali tez buyurtma berishni xohlashdi.",
+    solution: "To'liq avtomatlashtirilgan bot + admin dashboard yaratildi.",
+    result: "Buyurtmalar 340% oshdi, javob vaqti 2 daqiqagacha tushdi.",
+    metrics: [
+      { label: "Buyurtmalar", value: 12000, suffix: "+" },
+      { label: "Konversiya", value: 28, suffix: "%" },
+      { label: "Foydalanuvchilar", value: 8500, suffix: "+" },
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1611162617474-5b21e939e986?w=1200&q=80",
+      "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&q=80",
+    ],
+  },
+  {
+    slug: "3d-portfolio-experience",
+    title: "3D Portfolio Experience",
+    description: "Immersive WebGL portfolio with scroll-driven animations.",
+    category: "3D Web",
+    year: 2026,
+    tech: ["Next.js", "Three.js", "GSAP", "Framer Motion"],
+    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80",
+    demo: "https://rasuldev.uz",
+    problem: "Oddiy portfolio ajralib turmas edi.",
+    solution: "Scroll-driven 3D laptop va cinematic loading screen.",
+    result: "Awwwards nomination, 95+ Lighthouse performance.",
+    metrics: [
+      { label: "Lighthouse", value: 95, suffix: "+" },
+      { label: "Engagement", value: 4.2, suffix: "min" },
+      { label: "Bounce rate", value: 18, suffix: "%" },
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=1200&q=80",
+    ],
+  },
+  {
+    slug: "analytics-dashboard",
+    title: "Real-time Analytics Dashboard",
+    description: "Live metrics dashboard with WebSocket updates and D3 visualizations.",
+    category: "SaaS",
+    year: 2025,
+    tech: ["React", "Recharts", "Socket.io", "MongoDB"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+    problem: "Biznes real-time ma'lumotlarga ega emas edi.",
+    solution: "WebSocket overlay bilan SWR-powered dashboard.",
+    result: "Qaror qabul qilish vaqti 60% qisqardi.",
+    metrics: [
+      { label: "Ma'lumot yangilanishi", value: 1, suffix: "s" },
+      { label: "Foydalanuvchilar", value: 45, suffix: "+" },
+      { label: "ROI", value: 220, suffix: "%" },
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
+    ],
+  },
+  {
+    slug: "premium-shop-platform",
+    title: "Premium Shop Platform",
+    description: "Headless e-commerce with Stripe, Cloudinary, and 3D product preview.",
+    category: "E-Commerce",
+    year: 2025,
+    tech: ["Next.js", "Stripe", "MongoDB", "Cloudinary"],
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
+    problem: "Mavjud platforma sekin va cheklangan edi.",
+    solution: "Edge-optimized shop + admin panel + receipt upload.",
+    result: "Savdo 180% oshdi, checkout conversion 34%.",
+    metrics: [
+      { label: "Savdo", value: 180, suffix: "%" },
+      { label: "Conversion", value: 34, suffix: "%" },
+      { label: "Mahsulotlar", value: 120, suffix: "+" },
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80",
+    ],
+  },
+];
