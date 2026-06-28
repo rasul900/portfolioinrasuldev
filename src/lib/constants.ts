@@ -4,7 +4,7 @@ export const SITE = {
   description:
     "Premium personal brand portfolio. Telegram Bot Developer, Full Stack Developer, Creative Developer, 3D Web Developer.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://rasuldev.uz",
-  email: "hello@rasuldev.uz",
+  email: "abdurasulxayrulayev@gmail.com",
   telegram: "https://t.me/rasul_dev_admin",
   instagram: "https://www.instagram.com/_rasul.dev_?igsh=c3Z0ajJtY2c3NjF5",
   github: "https://github.com/rasul900",
