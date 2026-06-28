@@ -5,10 +5,10 @@ export const SITE = {
     "Premium personal brand portfolio. Telegram Bot Developer, Full Stack Developer, Creative Developer, 3D Web Developer.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://rasuldev.uz",
   email: "hello@rasuldev.uz",
-  telegram: "https://t.me/rasuldev",
-  instagram: "https://instagram.com/rasuldev",
-  github: "https://github.com/rasuldev",
-  discord: "rasuldev#0001",
+  telegram: "https://t.me/rasul_dev_admin",
+  instagram: "https://www.instagram.com/_rasul.dev_?igsh=c3Z0ajJtY2c3NjF5",
+  github: "https://github.com/rasul900",
+  discord: "Hoizrcha yo'q❌",
   location: "Toshkent, O'zbekiston",
 } as const;
 
