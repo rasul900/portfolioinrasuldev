@@ -38,7 +38,7 @@ export function HeroSection() {
           <div className="max-w-4xl">
             <p
               data-hero-reveal
-              className="font-display text-lg font-light tracking-[0.45em] text-white/90 uppercase md:text-xl"
+              className="font-display text-xl font-light tracking-[0.45em] text-white/90 uppercase md:text-xl"
             >
               RASUL
             </p>

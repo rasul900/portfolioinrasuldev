@@ -1,22 +1,10 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
 
 export default function NotFound() {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#080808] px-6">
-      {/* Grid background */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,150,0,0.035) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,150,0,0.035) 1px, transparent 1px)
-          `,
-          backgroundSize: "48px 48px",
-        }}
-      />
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black px-6">
 
       {/* Bottom glow */}
       <div
@@ -39,7 +27,7 @@ export default function NotFound() {
           alt="404 illustration"
           width={200}
           height={200}
-          className="object-contain"
+          className="object-contain rounded-2xl"
           style={{
             filter: "drop-shadow(0 0 36px rgba(255,150,0,0.4))",
           }}
@@ -102,19 +90,19 @@ export default function NotFound() {
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-[#0a0a0a] transition-transform hover:scale-105"
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-[#0a0a0a]"
             style={{
               background: "#ffaa00",
-              boxShadow: "0 0 0 0 rgba(255,160,0,0)",
               transition: "transform 0.18s, box-shadow 0.18s",
             }}
             onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.transform = "scale(1.05)";
               (e.currentTarget as HTMLElement).style.boxShadow =
                 "0 0 28px rgba(255,160,0,0.4)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow =
-                "0 0 0 0 rgba(255,160,0,0)";
+              (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+              (e.currentTarget as HTMLElement).style.boxShadow = "none";
             }}
           >
             <HomeIcon />
@@ -123,11 +111,12 @@ export default function NotFound() {
 
           <button
             onClick={() => history.back()}
-            className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-colors"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium"
             style={{
               background: "transparent",
               border: "1px solid rgba(255,255,255,0.1)",
               color: "rgba(255,255,255,0.4)",
+              transition: "color 0.18s, border-color 0.18s",
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLElement).style.color =
@@ -150,14 +139,8 @@ export default function NotFound() {
         {/* Dots */}
         <div className="mt-8 flex justify-center gap-2">
           <div className="h-[5px] w-[5px] rounded-full bg-[#ffaa00]" />
-          <div
-            className="h-[5px] w-[5px] rounded-full"
-            style={{ background: "rgba(255,255,255,0.12)" }}
-          />
-          <div
-            className="h-[5px] w-[5px] rounded-full"
-            style={{ background: "rgba(255,255,255,0.12)" }}
-          />
+          <div className="h-[5px] w-[5px] rounded-full" style={{ background: "rgba(255,255,255,0.12)" }} />
+          <div className="h-[5px] w-[5px] rounded-full" style={{ background: "rgba(255,255,255,0.12)" }} />
         </div>
       </div>
 
