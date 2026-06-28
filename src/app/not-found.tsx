@@ -35,7 +35,7 @@ export default function NotFound() {
         style={{ animation: "float 3.6s ease-in-out infinite" }}
       >
         <img
-          src="/not-found.jpg" // <- o'z rasmingizni shu yerga qo'ying
+          src="/not-found.jpg"
           alt="404 illustration"
           width={200}
           height={200}
