@@ -115,7 +115,7 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="interactive group flex shrink-0 items-center gap-2.5">
           <span className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-[#c9a87c] to-[#a08060] shadow-[0_0_20px_rgba(201,168,124,0.25)] transition-transform duration-300 group-hover:scale-105">
-            <Sparkles className="h-3.5 w-3.5 text-white" />
+            <img src="logo-navbar.jpg" alt="Dev-logo" />
           </span>
           <span className="font-display text-lg font-bold tracking-tight md:text-xl">
             <span className="text-white">RASUL</span>
