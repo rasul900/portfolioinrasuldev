@@ -115,7 +115,7 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="interactive group flex shrink-0 items-center gap-2.5">
           <span className="relative flex h-8 w-8 items-center justify-center rounded-xl]  transition-transform duration-300 group-hover:scale-105">
-            <img src="logo-navbar.jpg" alt="Dev-logo" className="rounded-3xl" />
+            <img src="logo-navbar.jpg" alt="Dev-logo" className="rounded-2xl" />
           </span>
           <span className="font-display text-lg font-bold tracking-tight md:text-xl">
             <span className="text-white">RASUL</span>

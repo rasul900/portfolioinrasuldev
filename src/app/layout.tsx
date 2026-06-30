@@ -40,6 +40,7 @@ export default function RootLayout({
   return (
     <html lang="uz" className={`${inter.variable} ${jetbrains.variable} dark h-full`} suppressHydrationWarning>
       <head>
+        <link rel="icon" type="image/jpeg" href="/logo-navabr.jpg" />
         <link
           href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap"
           rel="stylesheet"
