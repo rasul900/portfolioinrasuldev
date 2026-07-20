@@ -33,9 +33,10 @@ export function SectionBackdrop({
 
       {variant === "hero" && (
         <>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0908]/92 via-[#0a0908]/55 to-[#0a0908]/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0908]/75 via-transparent to-[#0a0908]/35" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0908]/94 via-[#0a0908]/60 to-[#0a0908]/35" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0908]/80 via-transparent to-[#0a0908]/40" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_18%_55%,rgba(201,168,124,0.12)_0%,transparent_65%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_45%_50%_at_82%_48%,rgba(201,168,124,0.14)_0%,transparent_62%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_35%_at_75%_40%,rgba(107,140,174,0.08)_0%,transparent_60%)]" />
         </>
       )}
