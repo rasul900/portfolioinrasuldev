@@ -75,7 +75,7 @@ export function AdminOrdersKanban() {
 
   return (
     <div>
-      <div className="mb-6 flex gap-4">
+      <div className="pt-10 mb-6 flex gap-4">
         <Button variant="secondary" onClick={exportXlsx}>
           <Download className="h-4 w-4" /> Excel export
         </Button>

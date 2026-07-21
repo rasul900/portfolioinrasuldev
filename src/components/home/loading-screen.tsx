@@ -64,7 +64,7 @@ export function LoadingScreen() {
       <div className="loading-content relative z-10 flex h-full flex-col justify-center px-8 md:px-16 lg:px-24">
         <div className="loading-text max-w-xl">
           <p className="font-display text-sm font-light tracking-[0.45em] text-white/70 uppercase md:text-base">
-            RASUL
+            ABDURASUL
           </p>
           <h1 className="font-display text-5xl font-bold tracking-tight text-[#f5f0e8] md:text-7xl lg:text-8xl">
             DEV

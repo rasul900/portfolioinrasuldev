@@ -118,7 +118,7 @@ export function Navbar() {
             <img src="logo-navbar.jpg" alt="Dev-logo" className="rounded-2xl" />
           </span>
           <span className="font-display text-lg font-bold tracking-tight md:text-xl">
-            <span className="text-white">RASUL</span>
+            <span className="text-white">ABDURASUL</span>
             <span className="bg-gradient-to-r from-glow to-azure bg-clip-text text-transparent"> DEV</span>
           </span>
         </Link>

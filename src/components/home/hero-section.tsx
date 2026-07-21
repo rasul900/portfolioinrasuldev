@@ -45,7 +45,7 @@ export function HeroSection() {
                 data-hero-reveal
                 className="font-display text-xl font-light tracking-[0.45em] text-white/90 uppercase md:text-xl"
               >
-                RASUL
+                ABDURASUL
               </p>
 
               <h1
