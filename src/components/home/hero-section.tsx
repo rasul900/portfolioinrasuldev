@@ -94,23 +94,27 @@ export function HeroSection() {
               </div>
             </div>
 
-            <div
-              data-hero-reveal
+            <motion.div
+              initial={{ opacity: 0, x: 48, scale: 0.94 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ delay: 4.4, duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
               className="pointer-events-none relative mx-auto mt-4 flex w-full max-w-[300px] justify-center sm:max-w-[360px] lg:mt-0 lg:mx-0 lg:max-w-none lg:justify-end"
             >
               <div
                 aria-hidden
                 className="hero-portrait-glow absolute top-[42%] left-1/2 h-[70%] w-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full lg:left-[52%]"
               />
-              <Image
-                src="/hero-portrait.png"
-                alt="Rasul"
-                width={720}
-                height={900}
-                priority
-                className="hero-portrait-img relative z-10 h-auto w-full max-h-[52vh] object-contain object-bottom lg:max-h-[76vh]"
-              />
-            </div>
+              <div className="hero-portrait-float relative z-10 w-full">
+                <Image
+                  src="/hero-portrait.png"
+                  alt="Rasul"
+                  width={720}
+                  height={900}
+                  priority
+                  className="hero-portrait-img h-auto w-full max-h-[52vh] object-contain object-bottom lg:max-h-[76vh]"
+                />
+              </div>
+            </motion.div>
           </div>
 
           <div
