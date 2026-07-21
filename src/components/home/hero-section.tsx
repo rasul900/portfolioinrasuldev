@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { SectionBackdrop } from "@/components/effects/section-backdrop";
+import { HeroPortrait } from "@/components/home/hero-portrait";
 import { SITE, TYPEWRITER_ROLES } from "@/lib/constants";
 import { Camera, ChevronDown, Code, Mail, Send } from "lucide-react";
 
@@ -94,27 +94,7 @@ export function HeroSection() {
               </div>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 48, scale: 0.94 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ delay: 4.4, duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
-              className="pointer-events-none relative mx-auto mt-4 flex w-full max-w-[300px] justify-center sm:max-w-[360px] lg:mt-0 lg:mx-0 lg:max-w-none lg:justify-end"
-            >
-              <div
-                aria-hidden
-                className="hero-portrait-glow absolute top-[42%] left-1/2 h-[70%] w-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full lg:left-[52%]"
-              />
-              <div className="hero-portrait-float relative z-10 w-full">
-                <Image
-                  src="/hero-portrait.png"
-                  alt="Abdurasul"
-                  width={640}
-                  height={640}
-                  priority
-                  className="hero-portrait-img h-auto w-full max-h-[52vh] object-contain object-center lg:max-h-[72vh]"
-                />
-              </div>
-            </motion.div>
+            <HeroPortrait />
           </div>
 
           <div
