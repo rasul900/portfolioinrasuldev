@@ -107,11 +107,11 @@ export function HeroSection() {
               <div className="hero-portrait-float relative z-10 w-full">
                 <Image
                   src="/hero-portrait.png"
-                  alt="Rasul"
-                  width={720}
-                  height={900}
+                  alt="Abdurasul"
+                  width={640}
+                  height={640}
                   priority
-                  className="hero-portrait-img h-auto w-full max-h-[52vh] object-contain object-bottom lg:max-h-[76vh]"
+                  className="hero-portrait-img h-auto w-full max-h-[52vh] object-contain object-center lg:max-h-[72vh]"
                 />
               </div>
             </motion.div>
