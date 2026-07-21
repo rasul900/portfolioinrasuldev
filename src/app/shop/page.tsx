@@ -6,7 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 
 export const metadata = {
-  title: "Shop — RASUL DEV",
+  title: "Shop — ABDURASUL DEV",
   description: "Premium merch and digital products",
 };
 

@@ -1,6 +1,6 @@
 export const SITE = {
-  name: "RASUL DEV",
-  title: "RASUL DEV — Creative Developer & Full Stack Architect",
+  name: "ABDURASUL DEV",
+  title: "ABDURASUL DEV — Creative Developer & Full Stack Architect",
   description:
     "Premium personal brand portfolio. Telegram Bot Developer, Full Stack Developer, Creative Developer, 3D Web Developer.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://rasuldev.uz",
