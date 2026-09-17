@@ -98,6 +98,7 @@ export function HeroPortrait() {
             alt="Abdurasul"
             width={720}
             height={960}
+            border-radius={25}
             priority
             className="hero-portrait-img relative z-10 mx-auto h-auto w-full max-h-[56vh] object-contain object-bottom lg:max-h-[78vh]"
           />
