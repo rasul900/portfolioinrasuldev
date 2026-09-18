@@ -23,7 +23,7 @@ export const NAV_LINKS = [
   { label: "Home", href: "/#home" },
   { label: "About", href: "/#about" },
   { label: "Skills", href: "/#skills" },
-  { label: "Services", href: "/#services" },
+  { label: "Yutuqlar", href: "/#achievements" },
   { label: "Projects", href: "/#projects" },
   { label: "Shop", href: "/shop" },
   { label: "Contact", href: "/#contact" },

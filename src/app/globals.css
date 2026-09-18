@@ -18,6 +18,7 @@
   --color-white: #f5f0e8;
   --color-glass: rgba(255, 255, 255, 0.05);
   --gradient-hero: radial-gradient(ellipse 80% 50% at 20% 50%, rgba(201, 168, 124, 0.15) 0%, transparent 60%);
+  --gradient-awards: radial-gradient(circle at 80% 12%, rgba(201, 168, 124, 0.18), transparent 32%), radial-gradient(circle at 12% 88%, rgba(107, 140, 174, 0.14), transparent 34%);
   --blur-glass: blur(20px) saturate(140%) brightness(1.05);
   --glow-blue: 0 0 40px rgba(201, 168, 124, 0.2), 0 0 80px rgba(107, 140, 174, 0.1);
   --background: var(--color-space);
