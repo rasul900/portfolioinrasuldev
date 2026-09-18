@@ -777,7 +777,17 @@ body {
 .project-card-media {
   position: relative;
   overflow: hidden;
-}
+  border-radius: 1.5rem 0.35rem 1.5rem 0.35rem;
+  transition: border-radius 0.5s ease, transform 0.5s ease;
+  }
+
+  .project-card-media--shape-1 { border-radius: 0.35rem 1.5rem 0.35rem 1.5rem; }
+  .project-card-media--shape-2 { border-radius: 50% 1.5rem 50% 0.35rem; }
+  .project-card-media--shape-3 { border-radius: 1.5rem 50% 0.35rem 1.5rem; }
+  .project-card:hover .project-card-media { transform: translateY(-4px) rotate(-0.5deg); }
+  .project-card:hover .project-card-media--shape-1 { transform: translateY(-4px) rotate(0.5deg); }
+  .project-card:hover .project-card-media--shape-2 { transform: translateY(-4px) rotate(-1deg); }
+  .project-card:hover .project-card-media--shape-3 { transform: translateY(-4px) rotate(1deg); }
 
 .project-card-overlay {
   position: absolute;
