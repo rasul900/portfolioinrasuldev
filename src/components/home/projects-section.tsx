@@ -27,7 +27,7 @@ export function ProjectsSection() {
   }, [filter]);
 
   const categories = ["all", ...new Set(projects.map((p) => p.category))];
-  const previewProjects = filtered.slice(0, 6);
+  const previewProjects = filtered.slice(0, 5);
 
   return (
     <AnimatedSection id="projects" background="projects">
