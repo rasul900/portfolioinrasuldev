@@ -67,7 +67,7 @@ export function Navbar() {
 
   const observeSections = useCallback(() => {
     if (!isHome) return;
-    const ids = ["home", "about", "skills", "services", "projects", "contact"];
+    const ids = ["home", "about", "skills", "achievements", "projects", "contact"];
     const observers: IntersectionObserver[] = [];
 
     ids.forEach((id) => {

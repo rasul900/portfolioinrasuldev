@@ -5,7 +5,7 @@ import { HeroSection } from "@/components/home/hero-section";
 import { TechStackSection } from "@/components/home/tech-stack-section";
 import { AboutSection } from "@/components/home/about-section";
 import { SkillsSection } from "@/components/home/skills-section";
-import { ServicesSection } from "@/components/home/services-section";
+import { AchievementsSection } from "@/components/home/services-section";
 import { ProjectsSection } from "@/components/home/projects-section";
 import { ContactSection } from "@/components/home/contact-section";
 import { AnalyticsSection } from "@/components/home/analytics-section";
@@ -25,7 +25,7 @@ export function HomePageClient() {
       <SkillsSection />
       <TechMarquee />
       <SectionDivider />
-      <ServicesSection />
+      <AchievementsSection />
       <SectionDivider />
       <ProjectsSection />
       <SectionDivider />

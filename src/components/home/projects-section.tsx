@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Fuse from "fuse.js";
@@ -26,6 +27,7 @@ export function ProjectsSection() {
   }, [filter]);
 
   const categories = ["all", ...new Set(projects.map((p) => p.category))];
+  const previewProjects = filtered.slice(0, 5);
 
   return (
     <AnimatedSection id="projects" background="projects">
@@ -61,7 +63,7 @@ export function ProjectsSection() {
 
       <motion.div layout className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence mode="popLayout">
-          {filtered.map((project, i) => (
+          {previewProjects.map((project, i) => (
             <motion.div
               key={project.slug}
               layout
@@ -81,9 +83,13 @@ export function ProjectsSection() {
         </AnimatePresence>
       </motion.div>
 
-      {filtered.length === 0 && (
-        <p className="text-slate py-16 text-center">Hech narsa topilmadi.</p>
-      )}
+      {filtered.length === 0 && <p className="text-slate py-16 text-center">Hech narsa topilmadi.</p>}
+
+      <div className="mt-12 flex justify-center">
+        <Link href="/projects" className="interactive group inline-flex items-center gap-3 rounded-full border border-[#c9a87c]/40 bg-[#c9a87c]/10 px-7 py-3 text-sm font-semibold text-[#e1c59d] transition-all hover:border-[#c9a87c] hover:bg-[#c9a87c] hover:text-[#0a0908]">
+          Barcha 150 ta loyihani ko&apos;rish <span className="transition-transform group-hover:translate-x-1">→</span>
+        </Link>
+      </div>
     </AnimatedSection>
   );
 }

@@ -92,15 +92,17 @@ export function HeroPortrait() {
           className="hero-portrait-glow absolute top-[46%] left-1/2 h-[72%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full lg:left-[52%]"
         />
 
-        <div ref={floatRef} className="relative z-10 w-full">
+        <div ref={floatRef} className="hero-portrait-frame relative z-10 w-full">
+          <div aria-hidden className="hero-portrait-sheen" />
+          <div aria-hidden className="hero-portrait-corner hero-portrait-corner-top" />
+          <div aria-hidden className="hero-portrait-corner hero-portrait-corner-bottom" />
           <Image
             src="/hero-portrait.png"
             alt="Abdurasul"
             width={720}
             height={960}
-            border-radius={25}
             priority
-            className="hero-portrait-img relative z-10 mx-auto h-auto w-full max-h-[56vh] object-contain object-bottom lg:max-h-[78vh]"
+            className="hero-portrait-img relative z-10 mx-auto h-auto w-full max-h-[56vh] rounded-[2rem] object-cover object-center lg:max-h-[78vh] lg:rounded-[2.75rem]"
           />
         </div>
       </div>

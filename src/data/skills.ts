@@ -104,8 +104,8 @@ export const serviceTiers: ServiceTier[] = [
 ];
 
 export const stats = [
-  { label: "Proyekt", value: 50, suffix: "+" },
-  { label: "Mijoz", value: 30, suffix: "+" },
-  { label: "Yil Tajriba", value: 5, suffix: "+" },
-  { label: "Telegram Subscriber", value: 10000, suffix: "+" },
+  { label: "Proyekt", value: 150, suffix: "+" },
+  { label: "Mijoz", value: 80, suffix: "+" },
+  { label: "Tajriba", value: 2, suffix: " yil" },
+  { label: "Daromad", value: 5000, suffix: "$ +" },
 ];

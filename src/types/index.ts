@@ -14,6 +14,8 @@ export interface Project {
   result: string;
   metrics: { label: string; value: number; suffix?: string }[];
   gallery: string[];
+  price?: number;
+  client?: string;
 }
 
 export interface Product {
