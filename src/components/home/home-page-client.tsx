@@ -12,10 +12,12 @@ import { AnalyticsSection } from "@/components/home/analytics-section";
 import { TechMarquee } from "@/components/home/tech-marquee";
 import { Footer } from "@/components/layout/footer";
 import { SectionDivider } from "@/components/effects/section-divider";
+import { NewsAnnouncement } from "@/components/home/news-announcement";
 
 export function HomePageClient() {
   return (
     <>
+      <NewsAnnouncement />
       <LoadingScreen />
       <HeroSection />
       <TechStackSection />

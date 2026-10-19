@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { products } from "@/data/products";
 import { GlassCard } from "@/components/ui/glass-card";
+import { NewsManager } from "@/components/admin/news-manager";
 
 const mockOrders = [
   { orderId: "RD-ABC123", customer: "Aziz K.", total: 450000, status: "pending" },
@@ -63,6 +64,10 @@ export default function AdminDashboard() {
             </tbody>
           </table>
         </GlassCard>
+
+        <div className="mb-8">
+          <NewsManager />
+        </div>
 
         <GlassCard>
           <h2 className="mb-4 font-medium">Kam qolgan mahsulotlar</h2>

@@ -39,6 +39,18 @@ const ProductSchema = new Schema(
   { timestamps: true }
 );
 
+const NewsSchema = new Schema(
+  {
+    title: { type: String, required: true, maxlength: 120 },
+    text: { type: String, required: true, maxlength: 500 },
+    link: { type: String, default: "" },
+    image: { type: String, default: "" },
+    position: { type: String, enum: ["top", "bottom", "side"], default: "side" },
+    active: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+
 const ContactSchema = new Schema(
   {
     name: String,
@@ -51,5 +63,6 @@ const ContactSchema = new Schema(
 export const Order = models.Order || mongoose.model("Order", OrderSchema);
 export const Product = models.Product || mongoose.model("Product", ProductSchema);
 export const Contact = models.Contact || mongoose.model("Contact", ContactSchema);
+export const News = models.News || mongoose.model("News", NewsSchema);
 
 export type { OrderStatus };
