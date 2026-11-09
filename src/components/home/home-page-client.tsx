@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { LoadingScreen } from "@/components/home/loading-screen";
 import { HeroSection } from "@/components/home/hero-section";
 import { TechStackSection } from "@/components/home/tech-stack-section";
@@ -12,6 +13,8 @@ import { AnalyticsSection } from "@/components/home/analytics-section";
 import { TechMarquee } from "@/components/home/tech-marquee";
 import { Footer } from "@/components/layout/footer";
 import { SectionDivider } from "@/components/effects/section-divider";
+
+const MascotCompanion = dynamic(() => import("@/components/three/mascot-companion"), { ssr: false });
 
 export function HomePageClient() {
   return (
@@ -33,6 +36,7 @@ export function HomePageClient() {
       <SectionDivider />
       <ContactSection />
       <Footer />
+      <MascotCompanion />
     </>
   );
 }
