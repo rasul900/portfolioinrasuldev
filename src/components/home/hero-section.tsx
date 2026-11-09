@@ -109,8 +109,8 @@ export function HeroSection() {
           ref={contentRef}
           className="relative z-10 flex min-h-screen flex-col justify-center px-6 pt-28 pb-24 md:px-14 lg:px-24 xl:px-32"
         >
-          <div className="relative z-10">
-            <div ref={scrollRef} className="max-w-4xl will-change-transform lg:max-w-[46%]">
+          <div className="pointer-events-none relative z-10">
+            <div ref={scrollRef} className="pointer-events-auto max-w-4xl will-change-transform lg:max-w-[46%]">
               <div ref={parallaxRef}>
                 <p
                   data-hero-reveal

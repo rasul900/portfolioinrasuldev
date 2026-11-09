@@ -89,11 +89,11 @@ export function MascotCompanion() {
             }}
             className="h-[120px] w-[104px] md:h-[150px] md:w-[130px]"
           >
-            <Canvas dpr={[1, 1.75]} camera={{ position: [0, 0.6, 5.2], fov: 35 }} gl={{ alpha: true, antialias: true }}>
+            <Canvas dpr={[1, 1.75]} camera={{ position: [0, 0.65, 5.4], fov: 35 }} gl={{ alpha: true, antialias: true }}>
               <ambientLight intensity={0.9} />
               <hemisphereLight args={["#ffe7c4", "#3a2c4a", 0.8]} />
               <directionalLight position={[3, 5, 4]} intensity={2.2} />
-              <ToonMascot position={[0, -0.3, 0]} scale={0.95} bounceKey={bounce} waving={false} />
+              <ToonMascot position={[0, -0.12, 0]} scale={0.84} bounceKey={bounce} waving={false} />
             </Canvas>
           </button>
         </motion.div>
