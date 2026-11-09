@@ -7,8 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
 import { useUIStore } from "@/store/ui";
 import { Button } from "@/components/ui/button";
-import { SectionBackdrop } from "@/components/effects/section-backdrop";
-import { HeroPortrait } from "@/components/home/hero-portrait";
+import dynamic from "next/dynamic";
 import { SITE, TYPEWRITER_ROLES } from "@/lib/constants";
 import { Camera, ChevronDown, Code, Mail, Send } from "lucide-react";
 
@@ -20,6 +19,8 @@ const SOCIAL = [
 ];
 
 gsap.registerPlugin(ScrollTrigger);
+
+const HeroToonScene = dynamic(() => import("@/components/three/hero-toon-scene"), { ssr: false });
 
 const TITLE = "DEV";
 
@@ -102,14 +103,14 @@ export function HeroSection() {
   return (
     <section id="hero" className="relative min-h-screen overflow-hidden">
       <div id="home" className="relative min-h-screen">
-        <SectionBackdrop imageKey="hero" alt="Kechqurun ish stoli" variant="hero" priority />
+        <div aria-hidden className="toon-sky absolute inset-0" />
 
         <div
           ref={contentRef}
           className="relative z-10 flex min-h-screen flex-col justify-center px-6 pt-28 pb-24 md:px-14 lg:px-24 xl:px-32"
         >
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,42%)] lg:gap-8 xl:gap-12">
-            <div ref={scrollRef} className="max-w-4xl will-change-transform">
+          <div className="pointer-events-none relative z-10">
+            <div ref={scrollRef} className="pointer-events-auto max-w-4xl will-change-transform lg:max-w-[46%]">
               <div ref={parallaxRef}>
                 <p
                   data-hero-reveal
@@ -149,21 +150,21 @@ export function HeroSection() {
                   <Button
                     variant="ghost"
                     href="#projects"
-                    className="min-w-[148px] border-white/35 px-8 tracking-[0.18em] uppercase hover:border-[#c9a87c]/60 hover:bg-white/5"
+                    className="toon-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
                   >
                     Projects
                   </Button>
                   <Button
                     variant="ghost"
                     href="/shop"
-                    className="min-w-[148px] border-white/35 px-8 tracking-[0.18em] uppercase hover:border-[#c9a87c]/60 hover:bg-white/5"
+                    className="toon-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
                   >
                     Shop
                   </Button>
                   <Button
                     variant="ghost"
                     href="#contact"
-                    className="min-w-[148px] border-white/35 px-8 tracking-[0.18em] uppercase hover:border-[#c9a87c]/60 hover:bg-white/5"
+                    className="toon-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
                   >
                     Contact
                   </Button>
@@ -171,7 +172,13 @@ export function HeroSection() {
               </div>
             </div>
 
-            <HeroPortrait />
+          </div>
+
+          <div className="relative -mx-6 mt-6 h-[380px] sm:h-[460px] lg:absolute lg:inset-0 lg:m-0 lg:h-auto">
+            <HeroToonScene />
+            <p className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-black/30 px-3 py-1 text-[10px] tracking-[0.25em] text-white/50 uppercase backdrop-blur lg:bottom-24 lg:left-auto lg:right-[22%] lg:translate-x-0">
+              Robotni bosing ✦
+            </p>
           </div>
 
           <div
