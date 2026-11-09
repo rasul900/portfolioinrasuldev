@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows, Float, RoundedBox, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 import { useUIStore } from "@/store/ui";
-import { ToonMascot } from "./toon-mascot";
+import { RobotModel } from "./robot-model";
 import { Ink, Toon } from "./toon-kit";
 
 function Cloud({ position, scale = 1, speed = 0.3 }: { position: [number, number, number]; scale?: number; speed?: number }) {
@@ -217,9 +217,11 @@ function Scene() {
 
       <group ref={world} scale={0.0001}>
         <Island />
-        <ToonMascot position={[0, 1.05, 0.2]} scale={0.95} />
-        <Laptop position={[1.15, 0.24, 0.55]} rotation={[0, -0.6, 0]} />
-        <Tree position={[-1.35, 0.15, -0.4]} />
+        <Suspense fallback={null}>
+          <RobotModel position={[0, 0.16, 0]} scale={0.48} />
+        </Suspense>
+        <Laptop position={[1.5, 0.24, 1.15]} rotation={[0, -0.7, 0]} />
+        <Tree position={[-1.55, 0.15, -0.95]} />
         <ContactShadows position={[0, 0.17, 0]} opacity={0.45} scale={4.5} blur={2.4} far={2} color="#2b1c12" />
 
         <Planet position={[-2.6, 2.9, -1.6]} />

@@ -5,7 +5,7 @@ import { Outlines } from "@react-three/drei";
 
 /** Shared 3-step gradient so every material shades like a cartoon cel. */
 let gradientMap: THREE.DataTexture | null = null;
-function getGradientMap() {
+export function getGradientMap() {
   if (gradientMap) return gradientMap;
   const data = new Uint8Array([90, 170, 255]);
   gradientMap = new THREE.DataTexture(data, data.length, 1, THREE.RedFormat);

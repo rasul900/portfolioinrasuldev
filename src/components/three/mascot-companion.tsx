@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { AnimatePresence, motion } from "framer-motion";
-import { ToonMascot } from "./toon-mascot";
+import { RobotModel } from "./robot-model";
 
 const LINES: Record<string, string> = {
   about: "Salom! Bu men haqimda 👋",
@@ -93,7 +93,9 @@ export function MascotCompanion() {
               <ambientLight intensity={0.9} />
               <hemisphereLight args={["#ffe7c4", "#3a2c4a", 0.8]} />
               <directionalLight position={[3, 5, 4]} intensity={2.2} />
-              <ToonMascot position={[0, -0.12, 0]} scale={0.84} bounceKey={bounce} waving={false} />
+              <Suspense fallback={null}>
+                <RobotModel position={[0, -0.95, 0]} scale={0.4} bounceKey={bounce} waving={false} />
+              </Suspense>
             </Canvas>
           </button>
         </motion.div>
