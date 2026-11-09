@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { gsap } from "gsap";
 import { SPRING } from "@/lib/constants";
+import { SplitText } from "@/components/ui/split-text";
 
 interface SectionHeaderProps {
   index: string;
@@ -44,18 +45,15 @@ export function SectionHeader({
         <div ref={lineRef} className="h-px flex-1 origin-left bg-gradient-to-r from-[#c9a87c]/50 to-transparent" />
       </motion.div>
 
-      <motion.h2
-        initial={{ opacity: 0, y: 50 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ ...SPRING, delay: 0.1 }}
-        className="font-display text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl"
-      >
-        {title.split(" ").map((word, i) => (
-          <span key={i} className={i === title.split(" ").length - 1 ? "text-gradient" : ""}>
-            {word}{" "}
-          </span>
-        ))}
-      </motion.h2>
+      <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+        <SplitText
+          text={title}
+          animate={inView}
+          delay={0.1}
+          stagger={0.09}
+          pieceClassName={(i, total) => (i === total - 1 ? "text-gradient" : "")}
+        />
+      </h2>
 
       {description && (
         <motion.p
