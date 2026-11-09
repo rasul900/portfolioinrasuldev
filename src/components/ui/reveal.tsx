@@ -4,11 +4,12 @@ import { motion, type Variants } from "framer-motion";
 import { SPRING } from "@/lib/constants";
 
 const variants: Variants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { ...SPRING, delay: i * 0.08 },
+    filter: "blur(0px)",
+    transition: { ...SPRING, delay: i * 0.08, filter: { duration: 0.6, delay: i * 0.08 } },
   }),
 };
 

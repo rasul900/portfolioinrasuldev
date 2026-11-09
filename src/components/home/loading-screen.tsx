@@ -33,10 +33,11 @@ export function LoadingScreen() {
       delay: DURATION,
       onComplete: () => {
         setLoadingComplete(true);
+        // Curtain lifts upward to reveal the page
         gsap.to(container, {
-          opacity: 0,
-          duration: 0.55,
-          ease: "power2.inOut",
+          clipPath: "inset(0% 0% 100% 0%)",
+          duration: 0.9,
+          ease: "expo.inOut",
           onComplete: () => {
             container.style.display = "none";
           },
@@ -57,7 +58,7 @@ export function LoadingScreen() {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[200] overflow-hidden bg-black"
+      className="fixed inset-0 z-[200] overflow-hidden bg-black [clip-path:inset(0%_0%_0%_0%)]"
       aria-label="Loading"
       aria-live="polite"
     >

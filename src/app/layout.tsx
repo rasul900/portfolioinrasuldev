@@ -7,6 +7,8 @@ import { Navbar } from "@/components/layout/navbar";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { CartDrawer } from "@/components/shop/cart-drawer";
 import { PWARegister } from "@/components/pwa-register";
+import { ScrollProgress } from "@/components/effects/scroll-progress";
+import { CardSpotlight } from "@/components/effects/card-spotlight";
 import { SITE } from "@/lib/constants";
 
 const inter = Inter({
@@ -62,6 +64,8 @@ export default function RootLayout({
       <body className="min-h-full bg-space text-white antialiased">
         <Providers>
           <PWARegister />
+          <ScrollProgress />
+          <CardSpotlight />
           <CustomCursor />
           <Navbar />
           <CommandPalette />

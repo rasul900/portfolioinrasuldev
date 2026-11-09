@@ -950,3 +950,57 @@ body {
   pointer-events: none;
   opacity: 0.8;
 }
+
+/* ── Motion polish ─────────────────────────────────────────── */
+
+/* Cursor-following spotlight on premium cards (position fed by <CardSpotlight />) */
+.premium-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(212, 184, 150, 0.12),
+    transparent 45%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.premium-card:hover::after {
+  opacity: 1;
+}
+
+/* Gold light sweep across the hero title once it has landed */
+.hero-title-char {
+  background: linear-gradient(
+    110deg,
+    #f5f0e8 0%,
+    #f5f0e8 40%,
+    #e9cfa3 50%,
+    #f5f0e8 60%,
+    #f5f0e8 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hero-title-sweep 6s ease-in-out 5.6s infinite;
+}
+
+@keyframes hero-title-sweep {
+  0% { background-position: 100% 0; }
+  35%, 100% { background-position: -50% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title-char,
+  .divider-shine,
+  .shimmer-text {
+    animation: none;
+  }
+}
