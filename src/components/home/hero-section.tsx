@@ -20,7 +20,7 @@ const SOCIAL = [
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HeroToonScene = dynamic(() => import("@/components/three/hero-toon-scene"), { ssr: false });
+const HeroTechScene = dynamic(() => import("@/components/three/hero-tech-scene"), { ssr: false });
 
 const TITLE = "DEV";
 
@@ -103,7 +103,7 @@ export function HeroSection() {
   return (
     <section id="hero" className="relative min-h-screen overflow-hidden">
       <div id="home" className="relative min-h-screen">
-        <div aria-hidden className="toon-sky absolute inset-0" />
+        <div aria-hidden className="tech-sky absolute inset-0" />
 
         <div
           ref={contentRef}
@@ -150,21 +150,21 @@ export function HeroSection() {
                   <Button
                     variant="ghost"
                     href="#projects"
-                    className="toon-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
+                    className="hero-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
                   >
                     Projects
                   </Button>
                   <Button
                     variant="ghost"
                     href="/shop"
-                    className="toon-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
+                    className="hero-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
                   >
                     Shop
                   </Button>
                   <Button
                     variant="ghost"
                     href="#contact"
-                    className="toon-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
+                    className="hero-btn min-w-[148px] px-8 tracking-[0.18em] uppercase"
                   >
                     Contact
                   </Button>
@@ -175,9 +175,9 @@ export function HeroSection() {
           </div>
 
           <div className="relative -mx-6 mt-6 h-[380px] sm:h-[460px] lg:absolute lg:inset-0 lg:m-0 lg:h-auto">
-            <HeroToonScene />
-            <p className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-black/30 px-3 py-1 text-[10px] tracking-[0.25em] text-white/50 uppercase backdrop-blur lg:bottom-24 lg:left-auto lg:right-[22%] lg:translate-x-0">
-              Robotni bosing ✦
+            <HeroTechScene />
+            <p className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-[#38e1ff]/25 bg-black/40 px-3 py-1 font-mono text-[11px] text-[#9fe9f7]/80 backdrop-blur lg:bottom-24 lg:left-auto lg:right-[22%] lg:translate-x-0">
+              <span className="text-[#38e1ff]">$</span> robotni bosing — scan / deploy
             </p>
           </div>
 
