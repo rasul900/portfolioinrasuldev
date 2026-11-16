@@ -2,48 +2,60 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, type ThreeElements } from "@react-three/fiber";
-import { Outlines, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
-import { getGradientMap, INK, windowPointer } from "./toon-kit";
+import { windowPointer } from "./pointer";
 
 export const ROBOT_URL = "/models/robot.glb";
 
 const LEGS = ["Leg_FL", "Leg_FR", "Leg_BL", "Leg_BR"] as const;
 type LegName = (typeof LEGS)[number];
 
-type Trick = "hop" | "spin" | "dance" | "wave";
-const TRICKS: Trick[] = ["hop", "wave", "spin", "dance"];
-const DURATION: Record<Trick, number> = { hop: 0.8, spin: 1.2, dance: 1.8, wave: 1.6 };
+export type RobotAction = "scan" | "deploy";
+const ACTIONS: RobotAction[] = ["scan", "deploy"];
+const DURATION: Record<RobotAction, number> = { scan: 2.4, deploy: 1.8 };
 
-/** Cartoon versions of the model's original materials, matched by name. */
-const TOON_COLORS: Record<string, { color: string; emissive?: string }> = {
-  lambert1: { color: "#f4f1ea" },
-  MetalShiny: { color: "#a3a1ad" },
-  Metal: { color: "#5d5a68" },
-  Rubber: { color: "#2a2730" },
-  BlackGlass: { color: "#1c1a26" },
-  lambert4: { color: "#9dff5c", emissive: "#5dff2a" },
-  pasted__Eyes: { color: "#e9fff9", emissive: "#bff8ff" },
+/**
+ * Shared, per-frame state the rest of the scene reads (holo screens, keyboard).
+ * Times are in the scene clock (seconds).
+ */
+export const robotSignal = {
+  action: "scan" as RobotAction,
+  at: -100,
+  typing: false,
+  lastTap: -100,
 };
 
-function makeToonMaterial(name: string) {
-  const spec = TOON_COLORS[name] ?? { color: "#cccccc" };
-  const m = new THREE.MeshToonMaterial({ color: spec.color, gradientMap: getGradientMap() });
-  if (spec.emissive) {
-    m.emissive = new THREE.Color(spec.emissive);
-    m.emissiveIntensity = 0.9;
+const ACCENT = "#38e1ff";
+
+/** Physically based versions of the model's original materials, matched by name. */
+function makeMaterial(name: string) {
+  switch (name) {
+    case "lambert1": // main shell
+      return new THREE.MeshPhysicalMaterial({ color: "#e6e4df", roughness: 0.32, metalness: 0.05, clearcoat: 0.7, clearcoatRoughness: 0.25 });
+    case "MetalShiny":
+      return new THREE.MeshStandardMaterial({ color: "#9a9ea8", roughness: 0.22, metalness: 0.95 });
+    case "Metal":
+      return new THREE.MeshStandardMaterial({ color: "#3b3f49", roughness: 0.38, metalness: 0.85 });
+    case "Rubber":
+      return new THREE.MeshStandardMaterial({ color: "#121318", roughness: 0.9, metalness: 0 });
+    case "BlackGlass": // visor
+      return new THREE.MeshPhysicalMaterial({ color: "#05070c", roughness: 0.14, metalness: 0.3, clearcoat: 1, clearcoatRoughness: 0.12, reflectivity: 0.7 });
+    case "lambert4": // light strips
+      return new THREE.MeshStandardMaterial({ color: ACCENT, emissive: ACCENT, emissiveIntensity: 2, toneMapped: false });
+    case "pasted__Eyes":
+      return new THREE.MeshStandardMaterial({ color: "#c9fbff", emissive: "#7ff3ff", emissiveIntensity: 3, toneMapped: false });
+    default:
+      return new THREE.MeshStandardMaterial({ color: "#8a8a8a", roughness: 0.5 });
   }
-  m.name = name;
-  return m;
 }
 
-/** Renders every mesh under a GLB node with toon shading and an ink outline. */
-function ToonPart({ node, materials }: { node: THREE.Object3D; materials: Map<string, THREE.Material> }) {
+/** Renders the meshes directly under a GLB part node (not those of nested parts). */
+function Part({ node, materials }: { node: THREE.Object3D; materials: Map<string, THREE.Material> }) {
   const meshes = useMemo(() => {
     const list: THREE.Mesh[] = [];
     node.traverse((o) => {
       if (!(o as THREE.Mesh).isMesh) return;
-      // Skip meshes that belong to nested part groups (e.g. the eyes under the head)
       for (let p = o.parent; p && p !== node; p = p.parent) if (/^(Eye_[LR]|Leg_..)$/.test(p.name)) return;
       list.push(o as THREE.Mesh);
     });
@@ -54,35 +66,36 @@ function ToonPart({ node, materials }: { node: THREE.Object3D; materials: Map<st
     <>
       {meshes.map((m) => {
         const name = (Array.isArray(m.material) ? m.material[0] : m.material).name;
-        const glow = name === "lambert4" || name === "pasted__Eyes";
-        return (
-          <mesh key={m.uuid} geometry={m.geometry} material={materials.get(name)}>
-            {!glow && <Outlines thickness={0.05} color={INK} />}
-          </mesh>
-        );
+        return <mesh key={m.uuid} geometry={m.geometry} material={materials.get(name)} />;
       })}
     </>
   );
 }
 
 type RobotProps = ThreeElements["group"] & {
-  /** Change this number to make the robot do its next trick. */
+  /** Change this number to run the next action (scan / deploy). */
   bounceKey?: number;
-  /** Wave hello every few seconds on its own. */
-  waving?: boolean;
+  /** Type on the holo keyboard between actions. */
+  typing?: boolean;
+  /** Publish actions to `robotSignal` so screens in the same scene can react. */
+  broadcast?: boolean;
 };
 
 /**
- * The user's four-legged robot model, split into body / head / eyes / legs
- * and animated procedurally: looks at the cursor, blinks, fidgets its legs,
- * and does hop / wave / spin / dance tricks when clicked.
+ * The four-legged dev robot: focused LED eyes, tracks the cursor, types on its
+ * holo keyboard when you leave it alone, and runs a visor scan or a "deploy"
+ * stance when clicked.
  */
-export function RobotModel({ bounceKey = 0, waving = true, ...props }: RobotProps) {
+export function RobotModel({ bounceKey = 0, typing = true, broadcast = false, ...props }: RobotProps) {
   const { nodes, materials: gltfMaterials } = useGLTF(ROBOT_URL);
 
   const materials = useMemo(() => {
     const map = new Map<string, THREE.Material>();
-    Object.keys(gltfMaterials).forEach((name) => map.set(name, makeToonMaterial(name)));
+    Object.keys(gltfMaterials).forEach((name) => {
+      const m = makeMaterial(name);
+      m.name = name;
+      map.set(name, m);
+    });
     return map;
   }, [gltfMaterials]);
   useEffect(() => () => materials.forEach((m) => m.dispose()), [materials]);
@@ -97,40 +110,39 @@ export function RobotModel({ bounceKey = 0, waving = true, ...props }: RobotProp
   }, [nodes]);
 
   const upper = useRef<THREE.Group>(null);
-  const spinner = useRef<THREE.Group>(null);
   const head = useRef<THREE.Group>(null);
   const eyeL = useRef<THREE.Group>(null);
   const eyeR = useRef<THREE.Group>(null);
+  const beam = useRef<THREE.Mesh>(null);
   const legRefs = useRef<Partial<Record<LegName, THREE.Group | null>>>({});
 
   const s = useRef({
     now: 0,
-    trick: "hop" as Trick,
-    trickAt: -10,
-    trickIndex: -1,
-    happyUntil: 0,
+    action: "scan" as RobotAction,
+    at: -100,
+    index: -1,
     nextBlink: 1.5,
-    nextFidget: 2,
-    fidgetLeg: "Leg_FL" as LegName,
-    nextWave: 4,
-    tilt: 0,
+    lastPointer: { x: 0, y: 0 },
+    pointerMovedAt: 0,
   });
 
-  const startTrick = (forced?: Trick) => {
+  const run = () => {
     const st = s.current;
-    if (!forced) st.trickIndex = (st.trickIndex + 1) % TRICKS.length;
-    st.trick = forced ?? TRICKS[st.trickIndex];
-    st.trickAt = st.now;
-    st.happyUntil = st.now + DURATION[st.trick] + 0.6;
+    st.index = (st.index + 1) % ACTIONS.length;
+    st.action = ACTIONS[st.index];
+    st.at = st.now;
+    if (broadcast) {
+      robotSignal.action = st.action;
+      robotSignal.at = st.now;
+    }
   };
 
   useEffect(() => {
     if (!bounceKey) return;
     const st = s.current;
-    st.trickIndex = (st.trickIndex + 1) % TRICKS.length;
-    st.trick = TRICKS[st.trickIndex];
-    st.trickAt = st.now;
-    st.happyUntil = st.now + DURATION[st.trick] + 0.6;
+    st.index = (st.index + 1) % ACTIONS.length;
+    st.action = ACTIONS[st.index];
+    st.at = st.now;
   }, [bounceKey]);
 
   const q = useMemo(() => new THREE.Quaternion(), []);
@@ -142,89 +154,89 @@ export function RobotModel({ bounceKey = 0, waving = true, ...props }: RobotProp
     const d = Math.min(delta, 0.05);
     const damp = THREE.MathUtils.damp;
 
-    if (waving && t > st.nextWave) {
-      st.nextWave = t + 7 + Math.random() * 4;
-      if (t - st.trickAt > DURATION[st.trick] + 2) startTrick("wave");
-    }
-
-    const p = (t - st.trickAt) / DURATION[st.trick];
+    const p = (t - st.at) / DURATION[st.action];
     const active = p >= 0 && p < 1;
-    const trick = active ? st.trick : null;
-    const ease = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+    const action = active ? st.action : null;
+    const env = active ? Math.sin(Math.min(p / 0.15, 1) * (Math.PI / 2)) * Math.min((1 - p) / 0.15, 1) : 0;
 
-    // ── Body: idle bob, hop arc with squash & stretch, dance sway
-    let y = Math.sin(t * 2.4) * 0.06;
-    let sq = 1;
-    let roll = Math.sin(t * 1.2) * 0.02;
-    if (trick === "hop") {
-      y += Math.sin(Math.PI * p) * 1.7;
-      sq = p < 0.12 ? 1 - p * 1.5 : p > 0.88 ? 1 - (1 - p) * 1.5 : 1 + Math.sin(Math.PI * p) * 0.08;
-    } else if (trick === "dance") {
-      roll = Math.sin(p * Math.PI * 6) * 0.16;
-      y += Math.abs(Math.sin(p * Math.PI * 6)) * 0.35;
-    } else if (trick === "spin") {
-      y += Math.sin(Math.PI * p) * 0.6;
+    // Is the visitor idle? Then the robot gets back to coding.
+    const pm = windowPointer;
+    if (Math.abs(pm.x - st.lastPointer.x) + Math.abs(pm.y - st.lastPointer.y) > 0.002) {
+      st.pointerMovedAt = t;
+      st.lastPointer = { x: pm.x, y: pm.y };
     }
-    const landing = !active && t - st.trickAt < DURATION[st.trick] + 0.3 && st.trick === "hop";
-    if (landing) sq = 1 - Math.sin(((t - st.trickAt - DURATION.hop) / 0.3) * Math.PI) * 0.12;
+    const isTyping = typing && !active && t - st.pointerMovedAt > 2.2 && Math.sin(t * 0.45) > -0.6;
+    if (broadcast) robotSignal.typing = isTyping;
 
+    // ── Body: calm breathing, rises into a "deploy" stance
     if (upper.current) {
-      upper.current.position.y = y;
-      const w = 1 / Math.sqrt(sq);
-      upper.current.scale.set(w, sq, w);
-      upper.current.rotation.x = damp(upper.current.rotation.x, roll, 10, d);
-    }
-    if (spinner.current) {
-      spinner.current.rotation.y = trick === "spin" ? ease(p) * Math.PI * 2 : 0;
+      const rise = action === "deploy" ? env * 0.55 : 0;
+      upper.current.position.y = damp(upper.current.position.y, Math.sin(t * 1.6) * 0.025 + rise, 8, d);
     }
 
-    // ── Head: follow the cursor, curious tilt, bob while dancing
+    // ── Head: track the cursor, look down at the keyboard while typing, sweep while scanning
     if (head.current) {
-      const yaw = windowPointer.x * 0.6;
-      const pitch = windowPointer.y * 0.28 + (trick === "dance" ? Math.sin(p * Math.PI * 12) * 0.12 : 0);
-      if (Math.random() < 0.003) st.tilt = (Math.random() - 0.5) * 0.5;
-      head.current.rotation.y = damp(head.current.rotation.y, yaw, 5, d);
-      head.current.rotation.z = damp(head.current.rotation.z, pitch, 5, d);
-      head.current.rotation.x = damp(head.current.rotation.x, st.tilt + (trick === "wave" ? 0.25 : 0), 3, d);
+      let yaw = pm.x * 0.55;
+      let pitch = pm.y * 0.25;
+      if (isTyping) {
+        yaw = Math.sin(t * 0.7) * 0.08;
+        pitch = -0.32;
+      }
+      if (action === "scan") {
+        yaw = Math.sin(p * Math.PI * 2) * 0.75 * env;
+        pitch = -0.05;
+      } else if (action === "deploy") {
+        yaw = 0;
+        pitch = 0.12 * env;
+      }
+      head.current.rotation.y = damp(head.current.rotation.y, yaw, action ? 6 : 3.5, d);
+      head.current.rotation.z = damp(head.current.rotation.z, pitch, action ? 6 : 3.5, d);
     }
 
-    // ── Eyes: blink, or squint happily after a trick
-    const happy = t < st.happyUntil;
-    let eyeScale = happy ? 0.4 : 1;
-    if (!happy && t > st.nextBlink) {
-      if (t - st.nextBlink < 0.13) eyeScale = 0.08;
-      else st.nextBlink = t + 2 + Math.random() * 3;
+    // ── Eyes: narrow, focused LEDs; tighten during a scan
+    let eyeScale = action === "scan" ? 0.32 : action === "deploy" ? 0.75 : 0.55;
+    if (!active && t > st.nextBlink) {
+      if (t - st.nextBlink < 0.12) eyeScale = 0.06;
+      else st.nextBlink = t + 2.5 + Math.random() * 3.5;
     }
     [eyeL.current, eyeR.current].forEach((e) => {
-      if (e) e.scale.y = damp(e.scale.y, eyeScale, 30, d);
+      if (e) e.scale.y = damp(e.scale.y, eyeScale, 25, d);
     });
+    const eyes = materials.get("pasted__Eyes") as THREE.MeshStandardMaterial | undefined;
+    if (eyes) eyes.emissiveIntensity = damp(eyes.emissiveIntensity, action ? 5 : 3, 8, d);
 
-    // ── Glowing stripes pulse
-    const lights = materials.get("lambert4") as THREE.MeshToonMaterial | undefined;
-    if (lights) lights.emissiveIntensity = 0.7 + Math.sin(t * 3.2) * 0.35 + (active ? 0.5 : 0);
-
-    // ── Legs
-    if (!active && t > st.nextFidget) {
-      st.fidgetLeg = LEGS[Math.floor(Math.random() * LEGS.length)];
-      st.nextFidget = t + 2.5 + Math.random() * 2.5;
+    // ── Light strips: slow pulse, brighter during actions, gold on deploy
+    const strips = materials.get("lambert4") as THREE.MeshStandardMaterial | undefined;
+    if (strips) {
+      strips.emissiveIntensity = 1.4 + Math.sin(t * 2) * 0.4 + env * 2;
+      strips.emissive.set(action === "deploy" ? "#ffc46b" : ACCENT);
+      strips.color.copy(strips.emissive);
     }
-    const fidgetT = t - (st.nextFidget - 2.5);
+
+    // ── Scan beam from the visor
+    if (beam.current) {
+      const m = beam.current.material as THREE.MeshBasicMaterial;
+      m.opacity = action === "scan" ? env * (0.16 + Math.sin(t * 30) * 0.03) : 0;
+      beam.current.visible = m.opacity > 0.005;
+    }
+
+    // ── Legs: typing taps with the front legs, firm stance on deploy, scan shuffle
     LEGS.forEach((leg, i) => {
       const g = legRefs.current[leg];
       if (!g) return;
+      const front = leg === "Leg_FL" || leg === "Leg_FR";
       let a = 0;
-      const diagonal = i === 0 || i === 3 ? 0 : Math.PI;
-      if (trick === "hop") a = Math.sin(Math.PI * p) * 0.55;
-      else if (trick === "spin") a = Math.max(0, Math.sin(p * Math.PI * 10 + diagonal)) * 0.45;
-      else if (trick === "dance") a = Math.max(0, Math.sin(p * Math.PI * 6 + diagonal)) * 0.5;
-      else if (trick === "wave" && leg === "Leg_FL") {
-        const up = Math.sin(Math.min(p / 0.2, 1) * (Math.PI / 2)) * (p > 0.85 ? (1 - p) / 0.15 : 1);
-        a = up * (1.05 + Math.sin(p * Math.PI * 8) * 0.25);
-      } else if (!active && leg === st.fidgetLeg && fidgetT > 0 && fidgetT < 0.5) {
-        a = Math.sin((fidgetT / 0.5) * Math.PI) * 0.3;
+      if (isTyping && front) {
+        const phase = leg === "Leg_FL" ? 0 : Math.PI * 0.85;
+        const tap = Math.max(0, Math.sin(t * 9 + phase));
+        a = 0.16 + tap * 0.14;
+        if (broadcast && tap > 0.98) robotSignal.lastTap = t;
+      } else if (action === "deploy") {
+        a = -0.12 * env;
+      } else if (action === "scan") {
+        a = Math.max(0, Math.sin(p * Math.PI * 4 + i * 1.6)) * 0.08 * env;
       }
-      const cur = g.userData.angle ?? 0;
-      const next = damp(cur, a, 18, d);
+      const next = damp(g.userData.angle ?? 0, a, 14, d);
       g.userData.angle = next;
       q.setFromAxisAngle(legAxes[leg], next);
       g.quaternion.copy(q);
@@ -232,43 +244,50 @@ export function RobotModel({ bounceKey = 0, waving = true, ...props }: RobotProp
   });
 
   const n = nodes as Record<string, THREE.Object3D>;
+  const eyeCenter = useMemo(
+    () => new THREE.Vector3().addVectors(n.Eye_L.position, n.Eye_R.position).multiplyScalar(0.5),
+    [n]
+  );
 
   return (
     <group
       {...props}
       onClick={(e) => {
         e.stopPropagation();
-        startTrick();
+        run();
       }}
       onPointerOver={() => (document.body.style.cursor = "pointer")}
       onPointerOut={() => (document.body.style.cursor = "")}
     >
       {/* The model faces +X; turn it toward the camera */}
-      <group ref={spinner}>
-        <group rotation={[0, -Math.PI / 2, 0]}>
-          <group ref={upper}>
-            <ToonPart node={n.Body} materials={materials} />
-            <group ref={head} position={n.Head.position}>
-              <ToonPart node={n.Head} materials={materials} />
-              <group ref={eyeL} position={n.Eye_L.position}>
-                <ToonPart node={n.Eye_L} materials={materials} />
-              </group>
-              <group ref={eyeR} position={n.Eye_R.position}>
-                <ToonPart node={n.Eye_R} materials={materials} />
-              </group>
+      <group rotation={[0, -Math.PI / 2, 0]}>
+        <group ref={upper}>
+          <Part node={n.Body} materials={materials} />
+          <group ref={head} position={n.Head.position}>
+            <Part node={n.Head} materials={materials} />
+            <group ref={eyeL} position={n.Eye_L.position}>
+              <Part node={n.Eye_L} materials={materials} />
             </group>
-            {LEGS.map((leg) => (
-              <group
-                key={leg}
-                position={n[leg].position}
-                ref={(el) => {
-                  legRefs.current[leg] = el;
-                }}
-              >
-                <ToonPart node={n[leg]} materials={materials} />
-              </group>
-            ))}
+            <group ref={eyeR} position={n.Eye_R.position}>
+              <Part node={n.Eye_R} materials={materials} />
+            </group>
+            {/* Scan fan: apex at the eyes, opening forward (+X) */}
+            <mesh ref={beam} position={[eyeCenter.x + 2.2, eyeCenter.y - 0.35, 0]} rotation={[0, 0, Math.PI / 2 + 0.16]} scale={[1, 1, 0.08]} visible={false}>
+              <coneGeometry args={[1.6, 4.4, 32, 1, true]} />
+              <meshBasicMaterial color={ACCENT} transparent opacity={0} depthWrite={false} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} toneMapped={false} />
+            </mesh>
           </group>
+          {LEGS.map((leg) => (
+            <group
+              key={leg}
+              position={n[leg].position}
+              ref={(el) => {
+                legRefs.current[leg] = el;
+              }}
+            >
+              <Part node={n[leg]} materials={materials} />
+            </group>
+          ))}
         </group>
       </group>
     </group>
